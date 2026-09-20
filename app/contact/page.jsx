@@ -1,11 +1,23 @@
 "use client";
 
 import { useState } from "react";
+import { FiGithub, FiLinkedin } from "react-icons/fi";
 import { Send, Mail, MapPin, Terminal, Check } from "lucide-react";
-import { FiGithub } from "react-icons/fi";
-import { CiLinkedin } from "react-icons/ci";
 
 import { PROFILE } from "@/lib/data";
+
+/*
+  Light theme tokens
+  page text   #14161C
+  muted text  #5B6270
+  border      #E3E6EC
+  surface     #FFFFFF
+  subtle bg   #F5F7FB
+  accent      #0F766E (text/borders)  ·  #4FD1C5 (button fill)
+*/
+
+const inputClass =
+  "w-full rounded-lg border border-[#E3E6EC] bg-white px-4 py-3 text-sm text-[#14161C] placeholder:text-[#9AA1AE] focus:outline-none focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/20";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -19,141 +31,160 @@ export default function Contact() {
     // No backend wired up yet — swap this for an API route or form service
     // (e.g. Resend, Formspree) when you're ready to receive real messages.
     setSent(true);
+    setTimeout(() => setSent(false), 5000);
   };
 
+  const isValid = form.name && form.email && form.message;
+
   return (
-    <div className="mx-auto max-w-3xl px-4 sm:px-6 py-16 sm:py-24">
-      <p className="font-mono text-sm text-[#4FD1C5]">~/contact</p>
-      <h1 className="mt-3 font-[Space_Grotesk,ui-sans-serif] text-3xl sm:text-4xl font-medium tracking-tight">
-        Let's talk
+    <div className="mx-auto max-w-4xl px-4 sm:px-6 py-16 sm:py-24">
+      <p className="font-mono text-sm text-[#0F766E]">~/contact</p>
+      <h1 className="mt-3 font-[Space_Grotesk,ui-sans-serif] text-3xl sm:text-4xl font-medium tracking-tight text-[#14161C]">
+        Let&apos;s work together
       </h1>
-      <p className="mt-3 text-[15px] sm:text-base text-[#9BA3AF] max-w-xl">
-        Open to full-time roles and select freelance projects. Fill out the
-        form or reach me directly — I read every message.
+      <p className="mt-3 max-w-2xl text-[15px] sm:text-base text-[#5B6270]">
+        Have a project in mind? I&apos;m available for full-time roles and select
+        freelance work. Reach out and let&apos;s create something great.
       </p>
 
-      <div className="mt-10 grid sm:grid-cols-[1fr_180px] gap-6">
-        <div className="rounded-xl border border-[#23262E] bg-[#14161C] overflow-hidden">
-          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#23262E] bg-[#181B22]">
-            <Terminal size={13} className="text-[#4FD1C5]" />
-            <span className="font-mono text-xs text-[#7A8290]">
-              zsh — send-message
-            </span>
+      <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_300px]">
+        {/* Form */}
+        <div className="overflow-hidden rounded-xl border border-[#E3E6EC] bg-white">
+          <div className="flex items-center gap-2 border-b border-[#E3E6EC] bg-[#F5F7FB] px-4 py-3">
+            <Terminal size={13} className="text-[#0F766E]" />
+            <span className="font-mono text-xs text-[#5B6270]">contact.jsx</span>
           </div>
 
           {sent ? (
-            <div className="p-6 sm:p-8 flex items-start gap-3">
-              <span className="mt-0.5 w-6 h-6 rounded-full bg-[#4FD1C5]/10 flex items-center justify-center shrink-0">
-                <Check size={14} className="text-[#4FD1C5]" />
-              </span>
-              <div>
-                <p className="font-mono text-sm text-[#4FD1C5]">
-                  message queued
+            <div className="flex min-h-[400px] items-center justify-center p-8 sm:p-10">
+              <div className="text-center">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#E6F7F5]">
+                  <Check size={24} className="text-[#0F766E]" />
+                </div>
+                <p className="font-mono text-sm font-semibold text-[#0F766E]">
+                  Message sent
                 </p>
-                <p className="mt-1 text-sm text-[#9BA3AF]">
-                  Thanks, {form.name || "there"} — I'll get back to you at{" "}
-                  {form.email || "your email"} soon.
+                <p className="mt-2 text-sm text-[#5B6270]">
+                  Thanks for reaching out, {form.name || "friend"}. I&apos;ll get
+                  back to you soon.
                 </p>
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="p-5 sm:p-8 space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-6 p-6 sm:p-8">
               <Field
-                label="name"
+                label="Full name"
                 name="name"
                 value={form.name}
                 onChange={handleChange}
-                placeholder="Jane Doe"
+                placeholder="John Doe"
+                autoComplete="name"
                 required
               />
               <Field
-                label="email"
+                label="Email address"
                 name="email"
                 type="email"
                 value={form.email}
                 onChange={handleChange}
-                placeholder="jane@company.com"
+                placeholder="john@example.com"
+                autoComplete="email"
                 required
               />
               <div>
                 <label
                   htmlFor="message"
-                  className="block font-mono text-xs text-[#7A8290] mb-1.5"
+                  className="mb-2 block font-mono text-xs text-[#5B6270]"
                 >
-                  message
+                  Message
                 </label>
                 <textarea
                   id="message"
                   name="message"
-                  rows={5}
+                  rows={6}
                   required
                   value={form.message}
                   onChange={handleChange}
-                  placeholder="What are you building?"
-                  className="w-full rounded-md bg-[#0F1116] border border-[#23262E] px-3 py-2 text-sm text-[#E6E8EB] placeholder:text-[#4A4F5A] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4FD1C5] resize-none"
+                  placeholder="Tell me about your project..."
+                  className={`${inputClass} resize-none`}
                 />
               </div>
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 rounded-md bg-[#F2A65A] text-[#14161C] px-5 py-2.5 text-sm font-medium hover:bg-[#f5b678] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F2A65A] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F1116]"
+                disabled={!isValid}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#4FD1C5] px-6 py-3 text-sm font-semibold text-[#14161C] disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
-                <Send size={15} />
+                <Send size={16} />
                 Send message
               </button>
             </form>
           )}
         </div>
 
-        <div className="flex sm:flex-col gap-3 sm:gap-4">
+        {/* Contact info */}
+        <div className="flex flex-col gap-4">
           <a
             href={`mailto:${PROFILE.email}`}
-            className="flex items-center gap-2 text-sm text-[#9BA3AF] hover:text-[#E6E8EB] transition-colors"
+            className="flex items-center gap-3 rounded-lg border border-[#E3E6EC] bg-white p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E]"
           >
-            <Mail size={16} className="text-[#4FD1C5] shrink-0" />
-            <span className="truncate">{PROFILE.email}</span>
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#E6F7F5]">
+              <Mail size={18} className="text-[#0F766E]" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-mono text-xs text-[#5B6270]">Email</p>
+              <p className="truncate text-sm text-[#14161C]">{PROFILE.email}</p>
+            </div>
           </a>
-          <span className="flex items-center gap-2 text-sm text-[#9BA3AF]">
-            <MapPin size={16} className="text-[#4FD1C5] shrink-0" />
-            {PROFILE.location}
-          </span>
-          <a
-            href={PROFILE.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm text-[#9BA3AF] hover:text-[#E6E8EB] transition-colors"
-          >
-            <FiGithub size={16} className="text-[#4FD1C5] shrink-0" />
-            GitHub
-          </a>
-          <a
-            href={PROFILE.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm text-[#9BA3AF] hover:text-[#E6E8EB] transition-colors"
-          >
-            <CiLinkedin size={16} className="text-[#4FD1C5] shrink-0" />
-            LinkedIn
-          </a>
+
+          <div className="flex items-center gap-3 rounded-lg border border-[#E3E6EC] bg-white p-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#FEF1E4]">
+              <MapPin size={18} className="text-[#C2711F]" />
+            </div>
+            <div>
+              <p className="font-mono text-xs text-[#5B6270]">Location</p>
+              <p className="text-sm text-[#14161C]">{PROFILE.location}</p>
+            </div>
+          </div>
+
+          <div className="pt-2">
+            <p className="mb-3 font-mono text-xs text-[#5B6270]">Connect</p>
+            <div className="flex gap-3">
+              <a
+                href={PROFILE.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                className="flex flex-1 items-center justify-center rounded-lg border border-[#E3E6EC] bg-white p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E]"
+              >
+                <FiGithub size={18} className="text-[#14161C]" />
+              </a>
+              <a
+                href={PROFILE.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="flex flex-1 items-center justify-center rounded-lg border border-[#E3E6EC] bg-white p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E]"
+              >
+                <FiLinkedin size={18} className="text-[#14161C]" />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-function Field({ label, ...props }) {
+function Field({ label, name, ...props }) {
   return (
     <div>
       <label
-        htmlFor={props.name}
-        className="block font-mono text-xs text-[#7A8290] mb-1.5"
+        htmlFor={name}
+        className="mb-2 block font-mono text-xs text-[#5B6270]"
       >
         {label}
       </label>
-      <input
-        id={props.name}
-        {...props}
-        className="w-full rounded-md bg-[#0F1116] border border-[#23262E] px-3 py-2 text-sm text-[#E6E8EB] placeholder:text-[#4A4F5A] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4FD1C5]"
-      />
+      <input id={name} name={name} className={inputClass} {...props} />
     </div>
   );
 }

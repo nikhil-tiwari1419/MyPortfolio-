@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Code2, Database, Wrench, ArrowRight, GitCommit } from "lucide-react";
 import { PROFILE, SKILLS, TIMELINE } from "@/lib/data";
 
@@ -7,20 +8,20 @@ const GROUP_ICON = { frontend: Code2, backend: Database, tooling: Wrench };
 export const metadata = { title: `About — ${PROFILE.name}` };
 
 export default function About() {
-  const initials = PROFILE.name
-    .split(" ")
-    .map((n) => n[0])
-    .join("");
-
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-24">
-      <p className="font-mono text-sm text-[#4FD1C5]">~/about.md</p>
+      <p className="font-mono text-sm text-[#1a1cae]">~/about.md</p>
 
       <div className="mt-6 grid md:grid-cols-[220px_1fr] gap-8 sm:gap-12 items-start">
-        <div className="mx-auto md:mx-0 w-40 h-40 sm:w-48 sm:h-48 rounded-xl border border-[#23262E] bg-gradient-to-br from-[#1B1E26] to-[#14161C] flex items-center justify-center">
-          <span className="font-[Space_Grotesk,ui-sans-serif] text-4xl text-[#F2A65A]">
-            {initials}
-          </span>
+        <div className="mx-auto md:mx-0 w-40 h-40 sm:w-48 sm:h-48 rounded-xl border border-[#23262E] overflow-hidden">
+          <Image
+            src="/Nikhil.jpg"
+            alt={PROFILE.name}
+            width={192}
+            height={192}
+            className="w-full h-full object-cover"
+            priority
+          />
         </div>
 
         <div>
@@ -31,16 +32,16 @@ export default function About() {
             {PROFILE.roles[0]} · {PROFILE.location}
           </p>
 
-          <p className="mt-6 text-[15px] sm:text-base leading-relaxed text-[#C4C9D1]">
+          <p className="mt-6 text-[15px] sm:text-base leading-relaxed text-[#0b377d]">
             {PROFILE.bio}
           </p>
-          <p className="mt-4 text-[15px] sm:text-base leading-relaxed text-[#C4C9D1]">
+          <p className="mt-4 text-[15px] sm:text-base leading-relaxed text-[#0b377d]">
             {PROFILE.longBio}
           </p>
 
           <Link
             href="/contact"
-            className="mt-6 inline-flex items-center gap-2 font-mono text-sm text-[#4FD1C5] hover:text-[#7fe4da] transition-colors"
+            className="mt-6 inline-flex items-center gap-2 font-mono text-sm text-[#4f51d1] hover:text-[#000000] transition-colors"
           >
             Work with me
             <ArrowRight size={14} />
@@ -50,18 +51,18 @@ export default function About() {
 
       {/* Skills */}
       <div className="mt-16">
-        <p className="font-mono text-sm text-[#4FD1C5]">~/skills</p>
+        <p className="font-mono text-sm text-[#4f53d1]">~/skills</p>
         <div className="mt-6 grid sm:grid-cols-3 gap-4">
           {SKILLS.map(({ group, items }) => {
             const Icon = GROUP_ICON[group];
             return (
               <div
                 key={group}
-                className="rounded-lg border border-[#23262E] bg-[#14161C] p-4"
+                className="rounded border border-[#23262E] bg-[#f4f6f8b0] p-4"
               >
                 <div className="flex items-center gap-2 mb-3">
-                  <Icon size={15} className="text-[#4FD1C5]" />
-                  <span className="font-mono text-xs uppercase tracking-wider text-[#7A8290]">
+                  <Icon size={15} className="text-[#4f51d1]" />
+                  <span className="font-mono text-xs uppercase tracking-wider text-[#000000]">
                     {group}
                   </span>
                 </div>
@@ -69,9 +70,9 @@ export default function About() {
                   {items.map((item) => (
                     <li
                       key={item}
-                      className="font-mono text-[13px] text-[#C4C9D1]"
+                      className="font-mono text-[13px] text-[#070707]"
                     >
-                      <span className="text-[#4FD1C5]">import</span> {item}
+                      <span className="text-[#58d14f]">import</span> {item}
                     </li>
                   ))}
                 </ul>
@@ -84,7 +85,7 @@ export default function About() {
       {/* Timeline */}
       <div className="mt-16">
         <div className="flex items-baseline gap-3">
-          <p className="font-mono text-sm text-[#4FD1C5]">~/experience</p>
+          <p className="font-mono text-sm text-[#4f5ed1]">~/experience</p>
           <span className="font-mono text-xs text-[#4A4F5A]">
             // git log --oneline
           </span>
@@ -96,10 +97,10 @@ export default function About() {
                 <GitCommit size={9} className="text-[#4FD1C5]" />
               </span>
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="font-mono text-xs text-[#F2A65A]">
+                <span className="font-mono text-xs text-[#f6912c]">
                   {entry.hash}
                 </span>
-                <span className="font-medium text-[#E6E8EB]">{entry.role}</span>
+                <span className="font-medium text-[#023c93]">{entry.role}</span>
                 <span className="text-sm text-[#7A8290]">@ {entry.org}</span>
                 <span className="ml-auto font-mono text-xs text-[#7A8290]">
                   {entry.period}
