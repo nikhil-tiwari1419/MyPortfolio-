@@ -1,20 +1,9 @@
 "use client";
-
+import emailjs from "@emailjs/browser";
 import { useState } from "react";
 import { FiGithub, FiLinkedin } from "react-icons/fi";
 import { Send, Mail, MapPin, Terminal, Check } from "lucide-react";
-
 import { PROFILE } from "@/lib/data";
-
-/*
-  Light theme tokens
-  page text   #14161C
-  muted text  #5B6270
-  border      #E3E6EC
-  surface     #FFFFFF
-  subtle bg   #F5F7FB
-  accent      #0F766E (text/borders)  ·  #4FD1C5 (button fill)
-*/
 
 const inputClass =
   "w-full rounded-lg border border-[#E3E6EC] bg-white px-4 py-3 text-sm text-[#14161C] placeholder:text-[#9AA1AE] focus:outline-none focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/20";
@@ -22,17 +11,49 @@ const inputClass =
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // No backend wired up yet — swap this for an API route or form service
-    // (e.g. Resend, Formspree) when you're ready to receive real messages.
-    setSent(true);
-    setTimeout(() => setSent(false), 5000);
+
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+        {
+          title: "New Portfolio Contact Message",
+          name: form.name,
+          email: form.email,
+          time: new Date().toLocaleString(),
+          message: form.message,
+        },
+        {
+          publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
+        }
+      );
+
+      setSent(true);
+      setForm({ name: "", email: "", message: "" });
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      setError("Message could not be sent. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   const isValid = form.name && form.email && form.message;
 
@@ -109,13 +130,22 @@ export default function Contact() {
                   className={`${inputClass} resize-none`}
                 />
               </div>
+              {error && (
+                <p role="alert" className="text-sm text-red-600">
+                  {error}
+                </p>
+              )}
               <button
                 type="submit"
-                disabled={!isValid}
+                disabled={!isValid || loading}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#4FD1C5] px-6 py-3 text-sm font-semibold text-[#14161C] disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F766E] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
               >
-                <Send size={16} />
-                Send message
+                {loading ? "Sending..." : (
+                  <>
+                    <Send size={16} />
+                    Send message
+                  </>
+                )}
               </button>
             </form>
           )}
