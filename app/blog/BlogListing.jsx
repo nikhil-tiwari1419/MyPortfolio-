@@ -368,13 +368,6 @@ export default function BlogListing() {
             </div>
           )}
         </section>
-
-        {/* Footer */}
-        <footer className="mt-16 border-t border-slate-200 pt-6 text-center">
-          <p className="font-mono text-xs text-slate-500">
-            Built with curiosity. Documented in code.
-          </p>
-        </footer>
       </div>
     </main>
   );
